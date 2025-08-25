@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name" translatable="false">Loadstone</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="destination_coordinate">Destination coordinate</string>
+    <string name="switch_show_distance">Show distance</string>
+    <string name="text_permissions_text">GPS is required for this app</string>
+    <string name="text_permissions">Permissions</string>
+    <string name="median_smoothing">Median smoothing</string>
+    <string name="iterational_smoothing">iterational smoothing</string>
+
+</resources>

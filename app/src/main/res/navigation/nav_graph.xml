@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/permissionView">
+
+    <fragment
+        android:id="@+id/selectionView"
+        android:name="de.jr.loadstone.SelectionView"
+        android:label="selection"
+        tools:layout="@layout/selection" >
+        <action
+            android:id="@+id/action_selectionView_to_compassView"
+            app:destination="@id/compassView" />
+    </fragment>
+    <fragment
+        android:id="@+id/permissionView"
+        android:name="de.jr.loadstone.PermissionView"
+        android:label="PermissionView" >
+        <action
+            android:id="@+id/action_permissionView_to_selectionView"
+            app:destination="@id/selectionView" />
+    </fragment>
+    <fragment
+        android:id="@+id/compassView"
+        android:name="de.jr.loadstone.CompassView"
+        android:label="CompassView" />
+</navigation>
