@@ -34,8 +34,6 @@ public class SelectionView extends Fragment {
 
                     UserInput.destinationCoordinate = getValidatedCoordinate(binding.destinationCoordinates.getText().toString());
 
-                    UserInput.showDistance = binding.switchShowDistance.isChecked();
-
                     NavHostFragment.findNavController(SelectionView.this)
                             .navigate(R.id.action_selectionView_to_compassView);
                 }

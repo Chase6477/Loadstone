@@ -3,8 +3,12 @@
     <string name="action_settings">Einstellungen</string>
     <string name="destination_coordinate">Ziel Koordinaten</string>
     <string name="switch_show_distance">Distanz Anzeigen</string>
-    <string name="text_permissions_text">Für diese App werden die genauen Standort Daten benötigt</string>
     <string name="text_permissions">Berechtigungen</string>
     <string name="median_smoothing">Median basiertes glätten</string>
     <string name="iterational_smoothing">Iterations basiertes glätten</string>
+    <string name="settings_settings">Einstellungen</string>
+    <string name="compass">Kompass</string>
+    <string name="back">Zurück</string>
+    <string name="coarse_location_warning">Bitte genaue Standort Erkennung zulassen</string>
+    <string name="denied_location_warning">Standort Berechtigung wird benötigt</string>
 </resources>

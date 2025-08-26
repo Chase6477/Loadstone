@@ -25,27 +25,33 @@ public class PermissionView extends Fragment {
         super.onCreate(savedInstanceState);
 
         requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
+                new ActivityResultContracts.RequestPermission(), isGranted -> {
+
                     if (isGranted) {
-                        if (getView() != null) {
-                            getView().post(() ->
-                                    NavHostFragment.findNavController(PermissionView.this)
-                                            .navigate(R.id.action_permissionView_to_selectionView)
-                            );
-                        }
+                        switchToSelectionView();
+
                     } else if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(requireContext(),
-                                "Consider granting precise location permissions",
+                                R.string.coarse_location_warning,
                                 Toast.LENGTH_SHORT).show();
+                        switchToSelectionView();
+
                     } else {
                         Toast.makeText(requireContext(),
-                                "GPS permission required",
+                                R.string.denied_location_warning,
                                 Toast.LENGTH_SHORT).show();
                     }
-                }
-        );
+                });
+    }
+
+    private void switchToSelectionView() {
+        if (getView() != null) {
+            getView().post(() ->
+                    NavHostFragment.findNavController(PermissionView.this)
+                            .navigate(R.id.action_permissionView_to_selectionView)
+            );
+        }
     }
 
     @Nullable
@@ -57,9 +63,8 @@ public class PermissionView extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public void onStart() {
+        super.onStart();
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 }

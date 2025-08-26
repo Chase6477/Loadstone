@@ -9,21 +9,41 @@
         android:id="@+id/selectionView"
         android:name="de.jr.loadstone.SelectionView"
         android:label="selection"
-        tools:layout="@layout/selection" >
+        tools:layout="@layout/selection">
         <action
             android:id="@+id/action_selectionView_to_compassView"
             app:destination="@id/compassView" />
     </fragment>
+
     <fragment
         android:id="@+id/permissionView"
         android:name="de.jr.loadstone.PermissionView"
-        android:label="PermissionView" >
+        android:label="PermissionView"
+        tools:layout="@layout/permission">
         <action
             android:id="@+id/action_permissionView_to_selectionView"
-            app:destination="@id/selectionView" />
+            app:destination="@id/selectionView"
+            app:popUpTo="@id/permissionView"
+            app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/compassView"
         android:name="de.jr.loadstone.CompassView"
-        android:label="CompassView" />
+        android:label="CompassView"
+        tools:layout="@layout/compass">
+        <action
+            android:id="@+id/action_compassView_to_selectionView"
+            app:destination="@id/selectionView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsView"
+        android:name="de.jr.loadstone.SettingsView"
+        android:label="SettingsView"
+        tools:layout="@layout/settings" />
+
+    <action
+        android:id="@+id/action_global_settingsView"
+        app:destination="@id/settingsView" />
 </navigation>

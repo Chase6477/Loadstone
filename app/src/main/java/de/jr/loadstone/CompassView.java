@@ -2,6 +2,7 @@ package de.jr.loadstone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -11,12 +12,12 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -24,7 +25,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.android.material.chip.ChipGroup;
 
 import de.jr.loadstone.databinding.CompassBinding;
 
@@ -32,25 +32,24 @@ import de.jr.loadstone.databinding.CompassBinding;
 public class CompassView extends Fragment {
 
     private final SortedFixedList<Float> sortedFixedList = new SortedFixedList<>(21, 0.f); //smoothness of the sensor rotation values
-    private final float MINIMAL_MARGIN = 10.f;
     private float smoothnessValue = -1;
     private byte iteration;
     private DeviceRotation deviceRotation;
 
-    private boolean ENABLE_MEDIAN_SMOOTHING = true;
-    private boolean ENABLE_ITERATION_SMOOTHING = false;
+    private boolean medianSmoothing;
+    private boolean iterationSmoothing;
 
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
-    private TextView positionText;
-    private ImageView compassNeedle;
-    private ImageView compassBackground;
-    private TextView textRotation;
+
+    private CompassBinding binding;
 
     private float sensorRotation;
     private final float[] results = new float[3];
+
+    SharedPreferences prefs;
 
 
     @SuppressLint("SetTextI18n")
@@ -65,9 +64,9 @@ public class CompassView extends Fragment {
             sensorRotation = (float) (Math.toDegrees(angles[0]) + 360) % 360;
             sortedFixedList.add(sensorRotation);
             float value = getPlausibleRotationValue();
-            compassNeedle.setRotation(results[1] - value);
-            textRotation.setText(value + "\n" + sensorRotation);
-            compassBackground.setRotation(-value);
+            binding.compassNeedle.setRotation(results[1] - value);
+            binding.textRotation.setText(value + "\n" + sensorRotation);
+            binding.compassBackground.setRotation(-value);
         });
 
         deviceRotation.setAccuracyListener((sensor, accuracy) -> {
@@ -76,16 +75,16 @@ public class CompassView extends Fragment {
 
             switch (accuracy) {
                 case SensorManager.SENSOR_STATUS_UNRELIABLE:
-                    textRotation.setTextColor(Color.rgb(255, 0, 0));
+                    binding.textRotation.setTextColor(Color.rgb(255, 0, 0));
                     break;
                 case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
-                    textRotation.setTextColor(Color.rgb(255, 165, 0));
+                    binding.textRotation.setTextColor(Color.rgb(255, 165, 0));
                     break;
                 case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
-                    textRotation.setTextColor(Color.rgb(255, 255, 0));
+                    binding.textRotation.setTextColor(Color.rgb(255, 255, 0));
                     break;
                 case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
-                    textRotation.setTextColor(Color.rgb(0, 128, 0));
+                    binding.textRotation.setTextColor(Color.rgb(0, 128, 0));
                     break;
 
             }
@@ -98,15 +97,12 @@ public class CompassView extends Fragment {
         System.out.println(result);
         iteration++;
 
-        System.out.println(ENABLE_MEDIAN_SMOOTHING + ", " + ENABLE_ITERATION_SMOOTHING);
+        System.out.println(medianSmoothing + ", " + iterationSmoothing);
 
-
-        if (result > MINIMAL_MARGIN && ENABLE_MEDIAN_SMOOTHING) {
+        if (result > 10 && medianSmoothing) {
             smoothnessValue = -1;
-            System.out.println("med");
             return sortedFixedList.getMedian();
-        } else if (ENABLE_ITERATION_SMOOTHING) {
-            System.out.println("ite");
+        } else if (iterationSmoothing) {
             if (smoothnessValue == -1 || iteration >= 100) {
                 iteration = 0;
                 smoothnessValue = sortedFixedList.getMedian();
@@ -121,19 +117,22 @@ public class CompassView extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        CompassBinding.inflate(inflater, container, false);
-        return inflater.inflate(R.layout.compass, container, false);
+
+        binding = CompassBinding.inflate(inflater, container, false);
+        return binding.getRoot();
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        positionText = view.findViewById(R.id.textPosition);
-        compassNeedle = view.findViewById(R.id.compassNeedle);
-        compassBackground = view.findViewById(R.id.compassBackground);
-        textRotation = view.findViewById(R.id.textRotation);
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        iterationSmoothing =  prefs.getBoolean("settings_switch_iterational_smoothing", true);
+        medianSmoothing =  prefs.getBoolean("settings_switch_median_smoothing", true);
 
 
         locationCallback = new LocationCallback() {
@@ -145,29 +144,15 @@ public class CompassView extends Fragment {
                     String pos = "Lat: " + lat + "\nLon: " + lon;
                     Location.distanceBetween(lat, lon, UserInput.destinationCoordinate.latitude, UserInput.destinationCoordinate.longitude, results);
                     pos += "\n" + results[0];
-                    positionText.setText(pos);
+                    binding.textPosition.setText(pos);
                 }
             }
         };
 
-        ChipGroup chipGroup = view.findViewById(R.id.chipGroup);
-
-        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-
-            ENABLE_MEDIAN_SMOOTHING = false;
-            ENABLE_ITERATION_SMOOTHING = false;
-
-            if (checkedIds.isEmpty())
-                return;
-
-            if (checkedIds.contains(R.id.chipMedianSmooth))
-                ENABLE_MEDIAN_SMOOTHING = true;
-            if (checkedIds.contains(R.id.chipIterationSmooth))
-                ENABLE_ITERATION_SMOOTHING = true;
-
-        });
-
-
+        binding.buttonBackCompass.setOnClickListener(v ->
+                NavHostFragment.findNavController(CompassView.this)
+                        .navigate(R.id.action_compassView_to_selectionView)
+        );
     }
 
     @SuppressLint("MissingPermission")
