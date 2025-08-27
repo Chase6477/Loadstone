@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="buttonScale">1</dimen>
+    <dimen name="needleScale">3</dimen>
+</resources>

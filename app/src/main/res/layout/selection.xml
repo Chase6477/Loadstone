@@ -5,26 +5,27 @@
     android:id="@+id/upperConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".SelectionView">
 
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/vertical_screen_distance"
+        android:layout_marginTop="@dimen/vertical_screen_distance"
         android:text="@android:string/ok"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/destinationCoordinates" />
 
     <EditText
         android:id="@+id/destinationCoordinates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="348dp"
+        android:layout_height="74dp"
         android:layout_marginTop="@dimen/vertical_screen_distance"
         android:ems="10"
         android:hint="@string/destination_coordinate"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

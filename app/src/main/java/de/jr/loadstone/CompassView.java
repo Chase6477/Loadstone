@@ -31,18 +31,19 @@ import de.jr.loadstone.databinding.CompassBinding;
 
 public class CompassView extends Fragment {
 
-    private final SortedFixedList<Float> sortedFixedList = new SortedFixedList<>(21, 0.f); //smoothness of the sensor rotation values
+    private SortedFixedList<Float> sortedFixedList; //smoothness of the sensor rotation values
     private float smoothnessValue = -1;
-    private byte iteration;
+    private int iteration;
+    private int maxIterationCount;
+    private float maxAngle;
+    private int smoothnessListSize;
     private DeviceRotation deviceRotation;
 
     private boolean medianSmoothing;
     private boolean iterationSmoothing;
 
-
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-
 
     private CompassBinding binding;
 
@@ -94,16 +95,14 @@ public class CompassView extends Fragment {
 
     public float getPlausibleRotationValue() {
         float result = sortedFixedList.get(sortedFixedList.size - 1) - sortedFixedList.get(0);
-        System.out.println(result);
         iteration++;
 
-        System.out.println(medianSmoothing + ", " + iterationSmoothing);
 
-        if (result > 10 && medianSmoothing) {
+        if (result > maxAngle && medianSmoothing) {
             smoothnessValue = -1;
             return sortedFixedList.getMedian();
         } else if (iterationSmoothing) {
-            if (smoothnessValue == -1 || iteration >= 100) {
+            if (smoothnessValue == -1 || iteration >= maxIterationCount) {
                 iteration = 0;
                 smoothnessValue = sortedFixedList.getMedian();
             }
@@ -133,6 +132,13 @@ public class CompassView extends Fragment {
 
         iterationSmoothing =  prefs.getBoolean("settings_switch_iterational_smoothing", true);
         medianSmoothing =  prefs.getBoolean("settings_switch_median_smoothing", true);
+        maxIterationCount = Integer.parseInt(prefs.getString("settings_text_iterational_smoothing", "100"));
+        maxAngle = Float.parseFloat(prefs.getString("settings_text_median_smoothing_angle", "10"));
+        smoothnessListSize = Integer.parseInt(prefs.getString("settings_text_median_smoothing_size", "21"));
+
+
+
+        sortedFixedList = new SortedFixedList<>(smoothnessListSize, 0.f);
 
 
         locationCallback = new LocationCallback() {

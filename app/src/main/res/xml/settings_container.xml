@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/compass">
 
         <SwitchPreference
@@ -7,11 +8,34 @@
             android:defaultValue="false"
             android:key="settings_switch_median_smoothing"
             android:title="@string/median_smoothing" />
+        <EditTextPreference
+            android:defaultValue="21"
+            android:key="settings_text_median_smoothing_size"
+            android:title="size"
+            android:dependency="settings_switch_median_smoothing"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="number" />
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="settings_text_median_smoothing_angle"
+            android:title="angle"
+            android:dependency="settings_switch_median_smoothing"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="number" />
         <SwitchPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="settings_switch_iterational_smoothing"
             android:title="@string/iterational_smoothing" />
+        <EditTextPreference
+            android:defaultValue="100"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="iterations"
+            android:dependency="settings_switch_iterational_smoothing"
+            app:key="settings_text_iterational_smoothing" />
     </PreferenceCategory>
 </PreferenceScreen>
