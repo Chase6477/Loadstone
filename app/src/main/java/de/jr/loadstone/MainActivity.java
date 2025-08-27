@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();

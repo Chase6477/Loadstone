@@ -5,7 +5,7 @@
     android:id="@+id/Constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/compassBackground"
@@ -14,8 +14,8 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/compass"
         android:scaleType="centerInside"
-        android:scaleX="3"
-        android:scaleY="3"
+        android:scaleX="@dimen/needleScale"
+        android:scaleY="@dimen/needleScale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/compass"
         android:scaleType="centerInside"
-        android:scaleX="3"
-        android:scaleY="3"
+        android:scaleX="@dimen/needleScale"
+        android:scaleY="@dimen/needleScale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/vertical_screen_distance"
+        android:scaleX="@dimen/buttonScale"
+        android:scaleY="@dimen/buttonScale"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

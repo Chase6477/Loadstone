@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">48dp</dimen>
     <dimen name="vertical_screen_distance">64dp</dimen>
+    <dimen name="buttonScale">1</dimen>
+    <dimen name="needleScale">3</dimen>
 </resources>
