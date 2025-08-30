@@ -5,10 +5,20 @@
     <string name="switch_show_distance">Distanz Anzeigen</string>
     <string name="text_permissions">Berechtigungen</string>
     <string name="median_smoothing">Median basiertes glätten</string>
-    <string name="iterational_smoothing">Iterations basiertes glätten</string>
+    <string name="calm_smoothing">Ruhige glättung</string>
     <string name="settings_settings">Einstellungen</string>
     <string name="compass">Kompass</string>
     <string name="back">Zurück</string>
     <string name="coarse_location_warning">Bitte genaue Standort Erkennung zulassen</string>
     <string name="denied_location_warning">Standort Berechtigung wird benötigt</string>
+    <string name="angle">Winkel</string>
+    <string name="buffer_size">Puffer größe</string>
+    <string name="time_in_milliseconds">Zeit in Millisekunden</string>
+    <string name="compass_uncalibrated">Kompass genauigkeit: Unkalibriert</string>
+    <string name="compass_bad">Kompass genauigkeit: Schlecht</string>
+    <string name="compass_ok">Kompass genauigkeit: Ok</string>
+    <string name="compass_good">Kompass genauigkeit: Gut</string>
+    <string name="compass_no_data">Kompass genauigkeit: Keine Information</string>
+    <string name="gps_no_data">GPS position: Keine Information</string>
+    <string name="gps">GPS position:</string>
 </resources>

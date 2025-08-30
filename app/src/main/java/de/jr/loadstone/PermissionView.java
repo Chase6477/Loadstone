@@ -32,17 +32,18 @@ public class PermissionView extends Fragment {
 
                     } else if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(requireContext(),
-                                R.string.coarse_location_warning,
-                                Toast.LENGTH_SHORT).show();
-                        switchToSelectionView();
+                        toastText(R.string.coarse_location_warning);
 
                     } else {
-                        Toast.makeText(requireContext(),
-                                R.string.denied_location_warning,
-                                Toast.LENGTH_SHORT).show();
+                        toastText(R.string.denied_location_warning);
                     }
                 });
+    }
+
+    private void toastText(int id) {
+        Toast.makeText(requireContext(),
+                id,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void switchToSelectionView() {

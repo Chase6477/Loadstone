@@ -5,31 +5,42 @@
     android:id="@+id/upperConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".SelectionView">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/selectionMap"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </org.osmdroid.views.MapView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cursor"
+        app:layout_constraintBottom_toBottomOf="@+id/selectionMap"
+        app:layout_constraintEnd_toEndOf="@+id/selectionMap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/vertical_screen_distance"
+        android:layout_marginTop="@dimen/bottom_screen_distance"
+        android:layout_marginBottom="@dimen/bottom_screen_distance"
+        android:fontFamily="@font/adlam_display"
         android:text="@android:string/ok"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/destinationCoordinates" />
+        app:layout_constraintTop_toBottomOf="@+id/selectionMap" />
 
-    <EditText
-        android:id="@+id/destinationCoordinates"
-        android:layout_width="348dp"
-        android:layout_height="74dp"
-        android:layout_marginTop="@dimen/vertical_screen_distance"
-        android:ems="10"
-        android:hint="@string/destination_coordinate"
-        android:inputType="text|textMultiLine"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

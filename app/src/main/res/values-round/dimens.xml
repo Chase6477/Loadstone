@@ -2,5 +2,7 @@
     <dimen name="fab_margin">48dp</dimen>
     <dimen name="vertical_screen_distance">-10dp</dimen>
     <dimen name="buttonScale">0.5</dimen>
-    <dimen name="needleScale">1.5</dimen>
+    <dimen name="needleScale">200dp</dimen>
+    <dimen name="horizontal_screen_distance">16dp</dimen>
+    <dimen name="bottom_screen_distance">32dp</dimen>
 </resources>

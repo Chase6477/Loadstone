@@ -8,24 +8,18 @@ import android.hardware.SensorManager;
 
 public class DeviceRotation implements SensorEventListener {
 
+    public final float[] orientationAngles = new float[3];
     private final SensorManager sensorManager;
-
     private final float[] accelerometerReading = new float[3];
     private final float[] magnetometerReading = new float[3];
     private final float[] rotationMatrix = new float[9];
-    public final float[] orientationAngles = new float[3];
-
     private OrientationListener orientationListener;
     private AccuracyListener accuracyListener;
+    private long lastTime = 0;
 
 
     public DeviceRotation(SensorManager sensorManager) {
         this.sensorManager = sensorManager;
-    }
-
-
-    public interface AccuracyListener {
-        void onAccuracyChanged(Sensor sensor, int accuracy);
     }
 
     public void setAccuracyListener(AccuracyListener listener) {
@@ -39,11 +33,6 @@ public class DeviceRotation implements SensorEventListener {
         }
     }
 
-
-    public interface OrientationListener {
-        void onOrientationUpdated(float[] orientationAngles);
-    }
-
     public void setOrientationListener(OrientationListener listener) {
         this.orientationListener = listener;
     }
@@ -54,13 +43,19 @@ public class DeviceRotation implements SensorEventListener {
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
 
         if (orientationListener != null) {
-            orientationListener.onOrientationUpdated(orientationAngles);
+            orientationListener.onOrientationUpdated(orientationAngles, getDelta());
         }
     }
 
+    private long getDelta() {
+        long delta = System.currentTimeMillis() - lastTime;
+        lastTime = System.currentTimeMillis();
+        return delta;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             System.arraycopy(event.values, 0, accelerometerReading,
                     0, accelerometerReading.length);
@@ -70,7 +65,6 @@ public class DeviceRotation implements SensorEventListener {
         }
         updateOrientationAngles();
     }
-
 
     public void resume() {
 
@@ -88,5 +82,14 @@ public class DeviceRotation implements SensorEventListener {
 
     public void pause() {
         sensorManager.unregisterListener(this);
+    }
+
+
+    public interface AccuracyListener {
+        void onAccuracyChanged(Sensor sensor, int accuracy);
+    }
+
+    public interface OrientationListener {
+        void onOrientationUpdated(float[] orientationAngles, long delta);
     }
 }

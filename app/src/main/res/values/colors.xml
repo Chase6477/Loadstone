@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gps_0">#FFFF0000</color>
+    <color name="gps_1">#FFA500</color>
+    <color name="gps_2">#FFFF00</color>
+    <color name="gps_3">#008000</color>
 </resources>

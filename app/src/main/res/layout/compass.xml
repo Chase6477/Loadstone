@@ -5,17 +5,15 @@
     android:id="@+id/Constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/compassBackground"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/compass"
-        android:scaleType="centerInside"
-        android:scaleX="@dimen/needleScale"
-        android:scaleY="@dimen/needleScale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,13 +22,10 @@
 
     <ImageView
         android:id="@+id/compassNeedle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/compass"
-        android:scaleType="centerInside"
-        android:scaleX="@dimen/needleScale"
-        android:scaleY="@dimen/needleScale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,27 +36,36 @@
         android:id="@+id/textPosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/vertical_screen_distance"
-        android:textAlignment="center"
+        android:layout_marginStart="@dimen/horizontal_screen_distance"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/adlam_display"
+        android:text="@string/gps_no_data"
+        android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textCompassStatus" />
 
     <TextView
-        android:id="@+id/textRotation"
+        android:id="@+id/textCompassStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:textAlignment="center"
+        android:layout_marginStart="@dimen/horizontal_screen_distance"
+        android:layout_marginTop="@dimen/vertical_screen_distance"
+        android:fontFamily="@font/adlam_display"
+        android:text="@string/compass_no_data"
+        android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPosition" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonBackCompass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/vertical_screen_distance"
+        android:layout_marginBottom="@dimen/bottom_screen_distance"
+        android:fontFamily="@font/adlam_display"
         android:scaleX="@dimen/buttonScale"
         android:scaleY="@dimen/buttonScale"
         android:text="@string/back"

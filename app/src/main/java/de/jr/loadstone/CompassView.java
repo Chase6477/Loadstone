@@ -3,7 +3,6 @@ package de.jr.loadstone;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -31,96 +31,34 @@ import de.jr.loadstone.databinding.CompassBinding;
 
 public class CompassView extends Fragment {
 
-    private SortedFixedList<Float> sortedFixedList; //smoothness of the sensor rotation values
-    private float smoothnessValue = -1;
-    private int iteration;
-    private int maxIterationCount;
+    private final int[][] compassStatus = {
+            {R.color.gps_0, R.string.compass_uncalibrated},
+            {R.color.gps_1, R.string.compass_bad},
+            {R.color.gps_2, R.string.compass_ok},
+            {R.color.gps_3, R.string.compass_good}
+    };
+    private final float[] results = new float[3];
+    SharedPreferences prefs;
+    private SortedFixedList<Float> sortedFixedList;
+    private SortedFixedList<Float> sortedFixedList180;
+    /**
+     * Is needed to calculate the median at the 0 - 360 gap by shifting it by 180 degrees
+     * // Removing it causes the needle to be imprecise at ~ 330 - 30 degrees
+     **/
+
+    private long timeSinceLast;
+    private float smoothedHoldValue = -1;
+    private long maxTimeSinceLast;
     private float maxAngle;
-    private int smoothnessListSize;
     private DeviceRotation deviceRotation;
-
     private boolean medianSmoothing;
-    private boolean iterationSmoothing;
-
+    private boolean calmSmoothing;
+    private double destinationLat;
+    private double destinationLon;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-
     private CompassBinding binding;
-
     private float sensorRotation;
-    private final float[] results = new float[3];
-
-    SharedPreferences prefs;
-
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        SensorManager sensorManager = (SensorManager) requireContext().getSystemService(Context.SENSOR_SERVICE);
-        deviceRotation = new DeviceRotation(sensorManager);
-
-        deviceRotation.setOrientationListener(angles -> {
-            sensorRotation = (float) (Math.toDegrees(angles[0]) + 360) % 360;
-            sortedFixedList.add(sensorRotation);
-            float value = getPlausibleRotationValue();
-            binding.compassNeedle.setRotation(results[1] - value);
-            binding.textRotation.setText(value + "\n" + sensorRotation);
-            binding.compassBackground.setRotation(-value);
-        });
-
-        deviceRotation.setAccuracyListener((sensor, accuracy) -> {
-            if (sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
-                return;
-
-            switch (accuracy) {
-                case SensorManager.SENSOR_STATUS_UNRELIABLE:
-                    binding.textRotation.setTextColor(Color.rgb(255, 0, 0));
-                    break;
-                case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
-                    binding.textRotation.setTextColor(Color.rgb(255, 165, 0));
-                    break;
-                case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
-                    binding.textRotation.setTextColor(Color.rgb(255, 255, 0));
-                    break;
-                case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
-                    binding.textRotation.setTextColor(Color.rgb(0, 128, 0));
-                    break;
-
-            }
-        });
-
-    }
-
-    public float getPlausibleRotationValue() {
-        float result = sortedFixedList.get(sortedFixedList.size - 1) - sortedFixedList.get(0);
-        iteration++;
-
-
-        if (result > maxAngle && medianSmoothing) {
-            smoothnessValue = -1;
-            return sortedFixedList.getMedian();
-        } else if (iterationSmoothing) {
-            if (smoothnessValue == -1 || iteration >= maxIterationCount) {
-                iteration = 0;
-                smoothnessValue = sortedFixedList.getMedian();
-            }
-            return smoothnessValue;
-        } else {
-            return sensorRotation;
-        }
-
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        binding = CompassBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -130,15 +68,25 @@ public class CompassView extends Fragment {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
-        iterationSmoothing =  prefs.getBoolean("settings_switch_iterational_smoothing", true);
-        medianSmoothing =  prefs.getBoolean("settings_switch_median_smoothing", true);
-        maxIterationCount = Integer.parseInt(prefs.getString("settings_text_iterational_smoothing", "100"));
-        maxAngle = Float.parseFloat(prefs.getString("settings_text_median_smoothing_angle", "10"));
-        smoothnessListSize = Integer.parseInt(prefs.getString("settings_text_median_smoothing_size", "21"));
+        calmSmoothing = prefs.getBoolean(getString(R.string.calm_smoothing), true);
+        medianSmoothing = prefs.getBoolean(getString(R.string.median_smoothing), true);
 
+        if (getArguments() != null) {
+            destinationLat = getArguments().getDouble("lat", -1);
+            destinationLon = getArguments().getDouble("lon", -1);
+            if (destinationLat == -1 || destinationLon == -1) {
+                NavHostFragment.findNavController(this).popBackStack();
+            }
+        }
 
+        if (medianSmoothing || calmSmoothing) {
+            int smoothnessListSize = (int) getPrefFloatValue(R.string.buffer_size, 21);
+            maxTimeSinceLast = (long) getPrefFloatValue(R.string.time_in_milliseconds, 500);
+            maxAngle = getPrefFloatValue(R.string.angle, 10);
 
-        sortedFixedList = new SortedFixedList<>(smoothnessListSize, 0.f);
+            sortedFixedList = new SortedFixedList<>(smoothnessListSize, 0.f);
+            sortedFixedList180 = new SortedFixedList<>(smoothnessListSize, 0.f);
+        }
 
 
         locationCallback = new LocationCallback() {
@@ -147,8 +95,8 @@ public class CompassView extends Fragment {
                 for (Location location : locationResult.getLocations()) {
                     double lat = location.getLatitude();
                     double lon = location.getLongitude();
-                    String pos = "Lat: " + lat + "\nLon: " + lon;
-                    Location.distanceBetween(lat, lon, UserInput.destinationCoordinate.latitude, UserInput.destinationCoordinate.longitude, results);
+                    String pos = getString(R.string.gps) + "\nLat: " + lat + "\nLon: " + lon;
+                    Location.distanceBetween(lat, lon, destinationLat, destinationLon, results);
                     pos += "\n" + results[0];
                     binding.textPosition.setText(pos);
                 }
@@ -161,13 +109,88 @@ public class CompassView extends Fragment {
         );
     }
 
+    // Yes, all these casts are needed
+    private float getPrefFloatValue(int id, double defaultValue) {
+        return Float.parseFloat(prefs.getString(getString(id), String.valueOf(defaultValue)));
+    }
+
     @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100L)
-                .setMaxUpdateDelayMillis(500L)
+        LocationRequest locationRequest = new LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                500L)
                 .build();
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SensorManager sensorManager = (SensorManager) requireContext().getSystemService(Context.SENSOR_SERVICE);
+        deviceRotation = new DeviceRotation(sensorManager);
+
+        deviceRotation.setOrientationListener((angles, delta) -> {
+            sensorRotation = (float) (Math.toDegrees(angles[0]) + 360) % 360;
+            float value = getSmoothedValue(sensorRotation, delta);
+            binding.compassNeedle.setRotation(results[1] - value);
+            binding.compassBackground.setRotation(-value);
+        });
+
+        deviceRotation.setAccuracyListener((sensor, accuracy) -> {
+            if (sensor.getType() != Sensor.TYPE_MAGNETIC_FIELD)
+                return;
+            binding.textCompassStatus.setTextColor(ContextCompat.getColor(requireContext(), compassStatus[accuracy][0]));
+            binding.textCompassStatus.setText(getString(compassStatus[accuracy][1]));
+        });
+    }
+
+
+    public float getSmoothedValue(float sensorRotation, long delta) {
+
+        if (!(calmSmoothing || medianSmoothing))
+            return sensorRotation;
+
+        sortedFixedList.add(sensorRotation);
+        sortedFixedList180.add((sensorRotation + 180) % 360);
+        timeSinceLast += delta;
+
+        float median = sortedFixedList.getMedian();
+
+        float result = (sortedFixedList.get(sortedFixedList.size - 1) - sortedFixedList.get(0));
+
+        if (result > 180)
+            median = (sortedFixedList180.getMedian() - 180) % 360;
+
+        result %= 360;
+
+        if (result > maxAngle && medianSmoothing) {
+            smoothedHoldValue = -1;
+            return median;
+        }
+
+        if (calmSmoothing) {
+            if (timeSinceLast >= maxTimeSinceLast || smoothedHoldValue == -1) {
+                timeSinceLast = 0;
+                smoothedHoldValue = median;
+            }
+            return smoothedHoldValue;
+        }
+        return sensorRotation;
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        binding = CompassBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+
     }
 
 

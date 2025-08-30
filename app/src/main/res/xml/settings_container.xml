@@ -6,36 +6,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
-            android:key="settings_switch_median_smoothing"
+            android:key="@string/median_smoothing"
             android:title="@string/median_smoothing" />
         <EditTextPreference
             android:defaultValue="21"
-            android:key="settings_text_median_smoothing_size"
-            android:title="size"
-            android:dependency="settings_switch_median_smoothing"
+            android:dependency="@string/median_smoothing"
+            android:inputType="number"
+            android:key="@string/buffer_size"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:inputType="number" />
+            android:title="@string/buffer_size" />
         <EditTextPreference
             android:defaultValue="10"
-            android:key="settings_text_median_smoothing_angle"
-            android:title="angle"
-            android:dependency="settings_switch_median_smoothing"
+            android:dependency="@string/median_smoothing"
+            android:inputType="number"
+            android:key="@string/angle"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:inputType="number" />
+            android:title="@string/angle" />
         <SwitchPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
-            android:key="settings_switch_iterational_smoothing"
-            android:title="@string/iterational_smoothing" />
+            android:key="@string/calm_smoothing"
+            android:title="@string/calm_smoothing" />
         <EditTextPreference
             android:defaultValue="100"
+            android:dependency="@string/calm_smoothing"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="iterations"
-            android:dependency="settings_switch_iterational_smoothing"
-            app:key="settings_text_iterational_smoothing" />
+            android:title="@string/time_in_milliseconds"
+            app:key="@string/time_in_milliseconds" />
+
     </PreferenceCategory>
 </PreferenceScreen>

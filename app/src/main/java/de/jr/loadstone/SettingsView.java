@@ -38,7 +38,7 @@ public class SettingsView extends Fragment {
         binding.buttonBackSettings.setOnClickListener(v ->
                 NavHostFragment.findNavController(SettingsView.this)
                         .popBackStack()
-    );
+        );
     }
 
     @Override

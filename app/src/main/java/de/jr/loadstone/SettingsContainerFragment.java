@@ -28,7 +28,7 @@ public class SettingsContainerFragment extends PreferenceFragmentCompat {
             EditTextPreference editTextPref = (EditTextPreference) pref;
 
             editTextPref.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 editText.setSelection(editText.getText().length());
             });
 

@@ -1,6 +1,5 @@
 package de.jr.loadstone;
 
-
 import java.util.ArrayList;
 
 public class SortedFixedList<V extends Comparable<V>> {

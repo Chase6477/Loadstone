@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="buttonScale">1</dimen>
-    <dimen name="needleScale">3</dimen>
+    <dimen name="needleScale">400dp</dimen>
+    <dimen name="horizontal_screen_distance">16dp</dimen>
 </resources>
