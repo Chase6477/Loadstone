@@ -2,63 +2,73 @@
 
 ### About the App
 
-- Its purpose is to let you spend time enjoying the outdoors, without constantly having to check the map for your next intersection - just knowing the overall direction and distance
+This App provides a compass that only shows the direction of the destination instead of the exact path.
 
-**WARNING!**
+## Selection screen
+<img width="270" height="600" alt="selection" src="https://github.com/user-attachments/assets/24141644-629c-4c8c-ba5a-00b2c11e5f6e" />
 
-- This is my first android app I made, so it's probably very unoptimized and has lots of bugs in it
+- your location is indicated by a marker
+- drag and zoom the map to your desired destination, indicated by the dot
+- press ok to choose this location
 
-### Selection screen
-<img width="238" height="515" alt="scr1" src="https://github.com/user-attachments/assets/aaab2758-65aa-47c8-9e3b-67ec97ff5539" />
+## Compass screen
 
-- Typed in coordinates MUST follow this format:  
-`49.53388529109523, 10.7029669810218`  
-*(decimal count doesn’t matter, other formats not yet supported)*
-- Well... the "Show distance" switch doesn't do that much yet...
+<img width="270" height="600" alt="compass" src="https://github.com/user-attachments/assets/f4f6dd25-14be-4f6b-9b97-a3aeaf10c576" />
 
-### Compass view
-<img width="237" height="515" alt="scr2" src="https://github.com/user-attachments/assets/3a7a65b5-b96a-48cc-a9a6-b0e3004d2b06" />
+- you might have to wait for a few seconds until your current location is set
+- as soon as the "GPS location" text updates, you are ready to go
+- follow the red side of the needle
+- Remaining distance in metres is shown under the Current location
 
-#### Text
-
-*It might take a while for the GPS data to be recognized, and for the first three texts to be shown*
-
-- Lat, Lon: current position coordinates
-- 3rd value: distance in meters
-- 4th and 5th values: smoothed and raw device rotation
-- Color change indicates the rotation precision:
+The magnetic sensor is crucial for displaying the correct direction on your display, so ensure it's calibrated correctly by moving your smartphone in a figur-8-motion. The "Compass accuracy" will show the estimated current precision, but it is not always correct.
   
-| **Color**   | **Meaning**             |
-|---------|-----------------------------|
-| Red     | No precision / uncalibrated |
-| Orange  | Low precision               |
-| Yellow  | Medium precision            |
-| Green   | Highest precision           |
+If you are still unsure about the correctness of the compass rotate your smartphone flat around it self and test if it always points in the globally same direction.
 
-- Calibrate the device by moving it in an 8-shaped pattern
+## Settings screen
 
-#### Compass
+<img width="270" height="2400" alt="Screenshot_20250830_225811" src="https://github.com/user-attachments/assets/0063cd0e-d9dd-49be-a860-e66b97af42cb" />
 
-- Star-shaped object in the background shows the cardinal directions
-- The red side of the needle shows the direction of the destination
+- Press the Cogwheel button to acces the settings, press the return button or navigation key to go back to the last opened screen
 
-#### Buttons
+##### Median smoothing
 
-- Enabling the "Median smoothing" button stabilizes the needle orientation by picking the median out of the last 21 rotation values
-- Enabling the "Iterational smoothing" button stabilizes the needle orientation by holding the median value for a short time if the rotation of the device doesn't change too much
+- smoothes the motion when the smartphone is rotated, by only rotating the needle by the median of the last 21[Buffer size] values
 
-### Known bugs
+- *Buffer size*: Integer  -- Size of the stored rotations to calculate the median. higer values lead to higher delay but smoother rotations
+- *Angle*: Float          -- The Minimum angle to activate the median smoothing (affects calm smoothing)
 
-- Incorrect coordinate formatting will cause the app to crash
-- Sometimes the app crashes when loading GPS data for the first time
-- You might get stuck on the permission window when exiting the app too quickly
-- Don't remove the GPS permission while you're in the compass view
+##### Calm smoothing
 
-### What do you need
+- smoothes the needles motion by keeping the angle for 500ms[Time in milliseconds] the same. It will only stay its direction if the smartphone does not rotate too much / the [Angle] value is overstepped
 
-- Android 11+
-  
-*Tested on android 11 and 15*
+- *Time in milliseconds*: -- Float: The time the rotation stays the same until it is forced to update
 
-- Magnetic sensor and acceleration sensor for device orientation
+## To Do
 
+- adding a Geo Coding API for finding your destination via text input
+- data management for OSMDroid - It is currently saving everything you have seen on the map
+- switching to a map from the compass screen - nice to have when you are really near your destination
+- adding some loading indicators when switching to compass screen, to indicate the current location getting loadad
+- adding some animations when switching screens
+- releasing APKs
+- ADVERTISEMENT $$ <- hehe sure
+
+## Specifications
+
+- Android 11+ Smartphones and wearableOS
+
+  *tested on android 15 only - pretty unusuable for watches*
+
+- magnetic sensor and acceleration sensor for device orientation
+
+- this app is available in the english and german language
+
+## Other more or less unimportant stuff
+
+- I do only check for location permissions when starting the App, sooo better don't remove them on runtime
+
+- There would be a way to implement the google maps API, but I wanted to use the OSMDroid alternative. You could still write your own imlementation for Google, I used Interfaces (for my first time wooooowwww)
+
+- This was my first App I made for Android, so It's pretty messy and inefficient etc.
+
+- All the locations aren't real btw, I sadly don't live in San Francisco, but I've bin there once!
