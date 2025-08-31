@@ -2,8 +2,8 @@ package de.jr.loadstone;
 
 public class Coordinate {
 
-    public final double latitude;
-    public final double longitude;
+    public double latitude;
+    public double longitude;
 
     public Coordinate(double latitude, double longitude) {
         this.latitude = latitude;

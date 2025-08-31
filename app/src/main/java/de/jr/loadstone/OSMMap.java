@@ -1,6 +1,7 @@
 package de.jr.loadstone;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
@@ -14,24 +15,25 @@ public class OSMMap implements IMap {
     private final Marker gpsMarker;
     private boolean isEnabled = true;
 
-    public OSMMap(MapView mapView, Coordinate lastLocation) {
+    public OSMMap(MapView mapView, Coordinate lastLocation, int mapSaveLimit) {
         this.map = mapView;
         mapController = map.getController();
 
         gpsMarker = new Marker(map);
 
-        createMap(lastLocation);
+        createMap(lastLocation, mapSaveLimit);
     }
 
     @Override
-    public void createMap(Coordinate lastLocation) {
+    public void createMap(Coordinate lastLocation, int mapSaveLimit) {
         mapController.setZoom(12.0);
         map.setMultiTouchControls(true);
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
         map.setMaxZoomLevel(20.0);
         map.setMinZoomLevel(2.0);
 
-        mapController.setCenter(coordinateToGeoPoint(lastLocation));
+        Configuration.getInstance().setTileFileSystemCacheMaxBytes((long) mapSaveLimit * 1024 * 1024);
+        Configuration.getInstance().setTileFileSystemCacheTrimBytes((long) (mapSaveLimit * 0.75 * 1024 * 1024));
 
         map.getOverlays().add(gpsMarker);
 

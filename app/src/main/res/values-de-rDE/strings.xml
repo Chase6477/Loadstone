@@ -21,4 +21,6 @@
     <string name="compass_no_data">Kompass genauigkeit: Keine Information</string>
     <string name="gps_no_data">GPS position: Keine Information</string>
     <string name="gps">GPS position:</string>
+    <string name="max_map_data">Maximal gespeicherte map Daten in MB</string>
+    <string name="map">Karte</string>
 </resources>

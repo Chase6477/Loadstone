@@ -1,6 +1,7 @@
 package de.jr.loadstone;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -48,7 +50,12 @@ public class SelectionView extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapView = new OSMMap(binding.selectionMap, new Coordinate(0, 0));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        mapView = new OSMMap(
+                binding.selectionMap, new Coordinate(0, 0),
+                (int) Float.parseFloat(prefs.getString(getString(R.string.max_map_data), String.valueOf(512)))
+        );
 
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext());
 

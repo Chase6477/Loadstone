@@ -31,12 +31,21 @@
             android:key="@string/calm_smoothing"
             android:title="@string/calm_smoothing" />
         <EditTextPreference
-            android:defaultValue="100"
+            android:defaultValue="500"
             android:dependency="@string/calm_smoothing"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/time_in_milliseconds"
             app:key="@string/time_in_milliseconds" />
+        <PreferenceCategory android:title="@string/map">
+
+        </PreferenceCategory>
+        <EditTextPreference
+            android:defaultValue="512"
+            android:key="@string/max_map_data"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/max_map_data" />
 
     </PreferenceCategory>
 </PreferenceScreen>

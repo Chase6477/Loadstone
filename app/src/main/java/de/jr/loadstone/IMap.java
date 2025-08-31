@@ -2,9 +2,9 @@ package de.jr.loadstone;
 
 public interface IMap {
 
-    void createMap(Coordinate lastLocation);
-
     void setGPSMarker(Coordinate gps);
+
+    void createMap(Coordinate lastLocation, int mapSaveLimit);
 
     void moveToGpsMarker();
 

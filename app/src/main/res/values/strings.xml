@@ -22,5 +22,7 @@
     <string name="compass_no_data">Compass_accuracy: No data</string>
     <string name="gps_no_data">GPS location: No data</string>
     <string name="gps">GPS location:</string>
+    <string name="max_map_data">Maximal saved map data in MB</string>
+    <string name="map">Map</string>
 
 </resources>
