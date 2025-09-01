@@ -61,16 +61,30 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonBackCompass"
+        android:id="@+id/buttonMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_screen_distance"
         android:layout_marginBottom="@dimen/bottom_screen_distance"
         android:fontFamily="@font/adlam_display"
         android:scaleX="@dimen/buttonScale"
         android:scaleY="@dimen/buttonScale"
-        android:text="@string/back"
+        android:text="@string/map_view"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buttonBackSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/horizontal_screen_distance"
+        android:layout_marginBottom="@dimen/bottom_screen_distance"
+        android:fitsSystemWindows="false"
+        android:fontFamily="@font/adlam_display"
+        android:scaleX="@dimen/buttonScale"
+        android:scaleY="@dimen/buttonScale"
+        android:text="@string/back_to_selection"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

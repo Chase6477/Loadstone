@@ -23,11 +23,12 @@ import com.google.android.gms.location.Priority;
 
 import org.osmdroid.config.Configuration;
 
+import de.jr.loadstone.databinding.MapBinding;
 import de.jr.loadstone.databinding.SelectionBinding;
 
-public class SelectionView extends Fragment {
+public class MapView extends Fragment {
 
-    private SelectionBinding binding;
+    private MapBinding binding;
 
     private OSMMap mapView;
 
@@ -43,7 +44,7 @@ public class SelectionView extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = SelectionBinding.inflate(inflater, container, false);
+        binding = MapBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -77,6 +78,8 @@ public class SelectionView extends Fragment {
                         mapView.setGPSMarker(new Coordinate(lat, lon));
                         mapView.moveToGpsMarker();
                         mapView.enableGPSMarker(true);
+                        mapView.enableDestinationMarker(true);
+                        mapView.setDestinationMarker(destination);
                     }
                 });
 
@@ -86,15 +89,27 @@ public class SelectionView extends Fragment {
 
         startLocationRequests(fusedClient);
 
-        binding.buttonStart.setOnClickListener(v ->
+        binding.mapBackCompass.setOnClickListener(v ->
                 {
                     Bundle args = new Bundle();
 
                     args.putDouble("lat", mapView.getDestinationMarker().latitude);
                     args.putDouble("lon", mapView.getDestinationMarker().longitude);
 
-                    NavHostFragment.findNavController(SelectionView.this)
-                            .navigate(R.id.action_selectionView_to_compassView, args);
+                    NavHostFragment.findNavController(MapView.this)
+                            .navigate(R.id.action_mapView_to_compassView, args);
+                }
+        );
+
+        binding.mapBackSelection.setOnClickListener(v ->
+                {
+                    Bundle args = new Bundle();
+
+                    args.putDouble("lat", mapView.getDestinationMarker().latitude);
+                    args.putDouble("lon", mapView.getDestinationMarker().longitude);
+
+                    NavHostFragment.findNavController(MapView.this)
+                            .navigate(R.id.action_mapView_to_selectionView, args);
                 }
         );
     }

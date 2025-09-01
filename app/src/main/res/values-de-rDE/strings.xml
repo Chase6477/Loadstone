@@ -23,4 +23,7 @@
     <string name="gps">GPS position:</string>
     <string name="max_map_data">Maximal gespeicherte map Daten in MB</string>
     <string name="map">Karte</string>
+    <string name="back_to_selection">Zurück zur Auswahl</string>
+    <string name="back_to_compass">Zurück zum Kompass</string>
+    <string name="map_view">Karten ansicht</string>
 </resources>

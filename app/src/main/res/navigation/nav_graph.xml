@@ -12,7 +12,11 @@
         tools:layout="@layout/selection">
         <action
             android:id="@+id/action_selectionView_to_compassView"
-            app:destination="@id/compassView" />
+            app:destination="@id/compassView"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -34,7 +38,18 @@
         tools:layout="@layout/compass">
         <action
             android:id="@+id/action_compassView_to_selectionView"
-            app:destination="@id/selectionView" />
+            app:destination="@id/selectionView"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_compassView_to_mapView"
+            app:destination="@id/mapView"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
 
     <fragment
@@ -45,5 +60,29 @@
 
     <action
         android:id="@+id/action_global_settingsView"
-        app:destination="@id/settingsView" />
+        app:destination="@id/settingsView"
+        app:enterAnim="@anim/settings_slide_in"
+        app:exitAnim="@anim/settings_slide_out"
+        app:popEnterAnim="@anim/settings_slide_in"
+        app:popExitAnim="@anim/settings_slide_out" />
+    <fragment
+        android:id="@+id/mapView"
+        android:name="de.jr.loadstone.MapView"
+        android:label="MapView"
+        tools:layout="@layout/map">
+        <action
+            android:id="@+id/action_mapView_to_compassView"
+            app:destination="@id/compassView"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_mapView_to_selectionView"
+            app:destination="@id/selectionView"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 </navigation>

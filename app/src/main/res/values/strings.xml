@@ -19,10 +19,13 @@
     <string name="compass_bad">Compass accuracy: Bad</string>
     <string name="compass_ok">Compass accuracy: OK</string>
     <string name="compass_good">Compass accuracy: Good</string>
-    <string name="compass_no_data">Compass_accuracy: No data</string>
+    <string name="compass_no_data">Compass accuracy: No data</string>
     <string name="gps_no_data">GPS location: No data</string>
     <string name="gps">GPS location:</string>
     <string name="max_map_data">Maximal saved map data in MB</string>
     <string name="map">Map</string>
+    <string name="back_to_selection">Back to selection</string>
+    <string name="back_to_compass">Back to compass</string>
+    <string name="map_view">Map view</string>
 
 </resources>

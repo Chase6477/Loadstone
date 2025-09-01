@@ -1,5 +1,12 @@
 package de.jr.loadstone;
 
+import android.graphics.drawable.Drawable;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
@@ -13,6 +20,7 @@ public class OSMMap implements IMap {
 
     private final IMapController mapController;
     private final Marker gpsMarker;
+    private final Marker destinationMarker;
     private boolean isEnabled = true;
 
     public OSMMap(MapView mapView, Coordinate lastLocation, int mapSaveLimit) {
@@ -20,6 +28,7 @@ public class OSMMap implements IMap {
         mapController = map.getController();
 
         gpsMarker = new Marker(map);
+        destinationMarker = new Marker(map);
 
         createMap(lastLocation, mapSaveLimit);
     }
@@ -40,6 +49,10 @@ public class OSMMap implements IMap {
         gpsMarker.setInfoWindow(null);
         gpsMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
+        destinationMarker.setInfoWindow(null);
+        destinationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        destinationMarker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.selection));
+
         setGPSMarker(lastLocation);
     }
 
@@ -50,27 +63,41 @@ public class OSMMap implements IMap {
 
     @Override
     public void setGPSMarker(Coordinate gps) {
-        if (isEnabled) {
-            gpsMarker.setPosition(coordinateToGeoPoint(gps));
-        }
+        gpsMarker.setPosition(coordinateToGeoPoint(gps));
     }
 
     @Override
     public void enableGPSMarker(boolean enable) {
-        this.isEnabled = enable;
+        if (enable)
+            map.getOverlays().add(gpsMarker);
+        else
+            map.getOverlays().remove(gpsMarker);
     }
 
     @Override
     public Coordinate getDestinationMarker() {
-        return new Coordinate(map.getMapCenter().getLatitude(), map.getMapCenter().getLongitude());
+        return geoPointToCoordinate(map.getMapCenter());
     }
 
     @Override
-    public void setDestinationMarker() {
+    public void setDestinationMarker(Coordinate coordinate) {
+        destinationMarker.setPosition(coordinateToGeoPoint(coordinate));
+    }
 
+    @Override
+    public void enableDestinationMarker(boolean enable) {
+        if (enable)
+            map.getOverlays().add(destinationMarker);
+        else
+            map.getOverlays().remove(destinationMarker);
     }
 
     private GeoPoint coordinateToGeoPoint(Coordinate coordinate) {
         return new GeoPoint(coordinate.latitude, coordinate.longitude);
     }
+
+    private Coordinate geoPointToCoordinate(IGeoPoint geoPoint) {
+        return new Coordinate(geoPoint.getLatitude(), geoPoint.getLongitude());
+    }
+
 }

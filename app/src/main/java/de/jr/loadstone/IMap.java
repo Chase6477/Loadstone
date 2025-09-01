@@ -12,6 +12,8 @@ public interface IMap {
 
     Coordinate getDestinationMarker();
 
-    void setDestinationMarker();
+    void setDestinationMarker(Coordinate coordinate);
+
+    void enableDestinationMarker(boolean enable);
 
 }

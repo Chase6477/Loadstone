@@ -45,7 +45,7 @@ public class CompassView extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private CompassBinding binding;
-    private Coordinate current;
+    private Coordinate current = new Coordinate(0,0);
     private Smoothing smoothing;
     private int compassAccurac = 4;
 
@@ -67,28 +67,29 @@ public class CompassView extends Fragment {
                     getArguments().getDouble("lat", -1),
                     getArguments().getDouble("lon", -1)
             );
+        }
 
-            boolean calmSmoothing = prefs.getBoolean(getString(R.string.calm_smoothing), true);
-            boolean medianSmoothing = prefs.getBoolean(getString(R.string.median_smoothing), true);
+        boolean calmSmoothing = prefs.getBoolean(getString(R.string.calm_smoothing), true);
+        boolean medianSmoothing = prefs.getBoolean(getString(R.string.median_smoothing), true);
 
-            smoothing = new Smoothing(
-                    (long) getPrefFloatValue(R.string.time_in_milliseconds, 500),
-                    getPrefFloatValue(R.string.angle, 10),
-                    (int) getPrefFloatValue(R.string.buffer_size, 21),
-                    calmSmoothing,
-                    medianSmoothing
+        smoothing = new Smoothing(
+                (long) getPrefFloatValue(R.string.time_in_milliseconds, 500),
+                getPrefFloatValue(R.string.angle, 10),
+                (int) getPrefFloatValue(R.string.buffer_size, 21),
+                calmSmoothing,
+                medianSmoothing
+        );
+
+        deviceRotation.setOrientationListener((angles, delta) -> {
+            float value = smoothing.getSmoothedValue(
+                    (float) (Math.toDegrees(angles[0]) + 360) % 360,
+                    delta
             );
 
-            deviceRotation.setOrientationListener((angles, delta) -> {
-                float value = smoothing.getSmoothedValue(
-                        (float) (Math.toDegrees(angles[0]) + 360) % 360,
-                        delta
-                );
+            binding.compassNeedle.setRotation(results[1] - value);
+            binding.compassBackground.setRotation(-value);
+        });
 
-                binding.compassNeedle.setRotation(results[1] - value);
-                binding.compassBackground.setRotation(-value);
-            });
-        }
 
         locationCallback = new LocationCallback() {
             @Override
@@ -101,10 +102,20 @@ public class CompassView extends Fragment {
             }
         };
 
-        binding.buttonBackCompass.setOnClickListener(v ->
+        binding.buttonBackSelection.setOnClickListener(v ->
                 NavHostFragment.findNavController(CompassView.this)
                         .navigate(R.id.action_compassView_to_selectionView)
         );
+
+        binding.buttonMap.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+
+            args.putDouble("lat", destination.latitude);
+            args.putDouble("lon", destination.longitude);
+
+            NavHostFragment.findNavController(CompassView.this)
+                    .navigate(R.id.action_compassView_to_mapView, args);
+        });
     }
 
     // Yes, all these casts are needed
