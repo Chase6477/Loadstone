@@ -1,10 +1,6 @@
 package de.jr.loadstone;
 
-import android.graphics.drawable.Drawable;
-
 import androidx.core.content.ContextCompat;
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
@@ -21,7 +17,6 @@ public class OSMMap implements IMap {
     private final IMapController mapController;
     private final Marker gpsMarker;
     private final Marker destinationMarker;
-    private boolean isEnabled = true;
 
     public OSMMap(MapView mapView, Coordinate lastLocation, int mapSaveLimit) {
         this.map = mapView;

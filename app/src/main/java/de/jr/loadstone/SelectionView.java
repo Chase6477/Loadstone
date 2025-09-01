@@ -77,6 +77,11 @@ public class SelectionView extends Fragment {
                         mapView.setGPSMarker(new Coordinate(lat, lon));
                         mapView.moveToGpsMarker();
                         mapView.enableGPSMarker(true);
+
+                        if (destination != null) {
+                            mapView.enableDestinationMarker(true);
+                            mapView.setDestinationMarker(destination);
+                        }
                     }
                 });
 

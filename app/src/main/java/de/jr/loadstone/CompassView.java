@@ -45,7 +45,7 @@ public class CompassView extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private CompassBinding binding;
-    private Coordinate current = new Coordinate(0,0);
+    private Coordinate current = new Coordinate(0, 0);
     private Smoothing smoothing;
     private int compassAccurac = 4;
 
@@ -103,19 +103,23 @@ public class CompassView extends Fragment {
         };
 
         binding.buttonBackSelection.setOnClickListener(v ->
-                NavHostFragment.findNavController(CompassView.this)
-                        .navigate(R.id.action_compassView_to_selectionView)
+            NavHostFragment.findNavController(CompassView.this)
+                    .navigate(R.id.action_compassView_to_selectionView, destinationArgs())
         );
 
-        binding.buttonMap.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-
-            args.putDouble("lat", destination.latitude);
-            args.putDouble("lon", destination.longitude);
-
+        binding.buttonMap.setOnClickListener(v ->
             NavHostFragment.findNavController(CompassView.this)
-                    .navigate(R.id.action_compassView_to_mapView, args);
-        });
+                    .navigate(R.id.action_compassView_to_mapView, destinationArgs())
+        );
+    }
+
+    private Bundle destinationArgs() {
+        Bundle args = new Bundle();
+
+        args.putDouble("lat", destination.latitude);
+        args.putDouble("lon", destination.longitude);
+
+        return args;
     }
 
     // Yes, all these casts are needed

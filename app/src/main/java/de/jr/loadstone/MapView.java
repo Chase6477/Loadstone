@@ -24,7 +24,6 @@ import com.google.android.gms.location.Priority;
 import org.osmdroid.config.Configuration;
 
 import de.jr.loadstone.databinding.MapBinding;
-import de.jr.loadstone.databinding.SelectionBinding;
 
 public class MapView extends Fragment {
 
@@ -90,28 +89,23 @@ public class MapView extends Fragment {
         startLocationRequests(fusedClient);
 
         binding.mapBackCompass.setOnClickListener(v ->
-                {
-                    Bundle args = new Bundle();
-
-                    args.putDouble("lat", mapView.getDestinationMarker().latitude);
-                    args.putDouble("lon", mapView.getDestinationMarker().longitude);
-
                     NavHostFragment.findNavController(MapView.this)
-                            .navigate(R.id.action_mapView_to_compassView, args);
-                }
+                            .navigate(R.id.action_mapView_to_compassView, destinationArgs())
         );
 
         binding.mapBackSelection.setOnClickListener(v ->
-                {
-                    Bundle args = new Bundle();
-
-                    args.putDouble("lat", mapView.getDestinationMarker().latitude);
-                    args.putDouble("lon", mapView.getDestinationMarker().longitude);
-
                     NavHostFragment.findNavController(MapView.this)
-                            .navigate(R.id.action_mapView_to_selectionView, args);
-                }
+                            .navigate(R.id.action_mapView_to_selectionView, destinationArgs())
         );
+    }
+
+    private Bundle destinationArgs() {
+        Bundle args = new Bundle();
+
+        args.putDouble("lat", destination.latitude);
+        args.putDouble("lon", destination.longitude);
+
+        return args;
     }
 
     @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
