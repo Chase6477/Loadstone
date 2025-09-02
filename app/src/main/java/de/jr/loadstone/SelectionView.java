@@ -106,10 +106,11 @@ public class SelectionView extends Fragment {
 
     @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     private void startLocationRequests(FusedLocationProviderClient fusedClient) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         LocationRequest locationRequest = new LocationRequest.Builder(
                 Priority.PRIORITY_HIGH_ACCURACY,
-                5000L)
+                (int) Float.parseFloat(prefs.getString(getString(R.string.gps_refresh_rate), String.valueOf(500))))
                 .build();
 
         fusedClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());

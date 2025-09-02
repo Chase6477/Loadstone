@@ -14,16 +14,17 @@
     <string name="angle">Winkel</string>
     <string name="buffer_size">Puffer größe</string>
     <string name="time_in_milliseconds">Zeit in Millisekunden</string>
-    <string name="compass_uncalibrated">Kompass genauigkeit: Unkalibriert</string>
-    <string name="compass_bad">Kompass genauigkeit: Schlecht</string>
-    <string name="compass_ok">Kompass genauigkeit: Ok</string>
-    <string name="compass_good">Kompass genauigkeit: Gut</string>
-    <string name="compass_no_data">Kompass genauigkeit: Keine Information</string>
-    <string name="gps_no_data">GPS position: Keine Information</string>
-    <string name="gps">GPS position:</string>
+    <string name="compass_uncalibrated">Kompass Genauigkeit: Unkalibriert</string>
+    <string name="compass_bad">Kompass Genauigkeit: Schlecht</string>
+    <string name="compass_ok">Kompass Genauigkeit: Ok</string>
+    <string name="compass_good">Kompass Genauigkeit: Gut</string>
+    <string name="compass_no_data">Kompass Genauigkeit: Keine Information</string>
+    <string name="gps_no_data">GPS Position: Keine Information</string>
+    <string name="gps">GPS Position:</string>
     <string name="max_map_data">Maximal gespeicherte map Daten in MB</string>
     <string name="map">Karte</string>
     <string name="back_to_selection">Zurück zur Auswahl</string>
     <string name="back_to_compass">Zurück zum Kompass</string>
     <string name="map_view">Karten ansicht</string>
+    <string name="gps_refresh_rate">GPS Aktualisierungsrate in Millissekunden</string>
 </resources>

@@ -46,6 +46,12 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/max_map_data" />
+        <EditTextPreference
+            android:defaultValue="500"
+            android:key="@string/gps_refresh_rate"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/gps_refresh_rate" />
 
     </PreferenceCategory>
 </PreferenceScreen>

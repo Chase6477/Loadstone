@@ -131,7 +131,7 @@ public class CompassView extends Fragment {
     private void startListenerUpdates() {
         LocationRequest locationRequest = new LocationRequest.Builder(
                 Priority.PRIORITY_HIGH_ACCURACY,
-                500L)
+                (int) getPrefFloatValue(R.string.gps_refresh_rate, 500))
                 .build();
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());

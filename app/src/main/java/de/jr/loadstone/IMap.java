@@ -16,4 +16,12 @@ public interface IMap {
 
     void enableDestinationMarker(boolean enable);
 
+    void moveCenterTo(Coordinate coordinate);
+
+    Coordinate getCenterPosition();
+
+    float getZoom();
+
+    void setZoom(float zoom);
+
 }

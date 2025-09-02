@@ -30,7 +30,7 @@ public class OSMMap implements IMap {
 
     @Override
     public void createMap(Coordinate lastLocation, int mapSaveLimit) {
-        mapController.setZoom(12.0);
+        mapController.setZoom(16.0);
         map.setMultiTouchControls(true);
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
         map.setMaxZoomLevel(20.0);
@@ -59,6 +59,7 @@ public class OSMMap implements IMap {
     @Override
     public void setGPSMarker(Coordinate gps) {
         gpsMarker.setPosition(coordinateToGeoPoint(gps));
+        map.invalidate();
     }
 
     @Override
@@ -85,6 +86,26 @@ public class OSMMap implements IMap {
             map.getOverlays().add(destinationMarker);
         else
             map.getOverlays().remove(destinationMarker);
+    }
+
+    @Override
+    public void moveCenterTo(Coordinate coordinate) {
+        mapController.setCenter(coordinateToGeoPoint(coordinate));
+    }
+
+    @Override
+    public Coordinate getCenterPosition() {
+        return geoPointToCoordinate(map.getMapCenter());
+    }
+
+    @Override
+    public float getZoom() {
+        return (float) map.getZoomLevelDouble();
+    }
+
+    @Override
+    public void setZoom(float zoom) {
+        map.setZoomLevel(zoom);
     }
 
     private GeoPoint coordinateToGeoPoint(Coordinate coordinate) {
