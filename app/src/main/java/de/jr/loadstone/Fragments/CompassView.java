@@ -41,7 +41,6 @@ public class CompassView extends Fragment {
             {R.color.gps_1, R.string.compass_bad},
             {R.color.gps_2, R.string.compass_ok},
             {R.color.gps_3, R.string.compass_good},
-            {R.color.white, R.string.compass_no_data}
     };
     private final float[] results = new float[3];
 
@@ -63,8 +62,6 @@ public class CompassView extends Fragment {
         deviceRotation = new DeviceRotation(sensorManager);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
-
-        updateCompassAccuracyText();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
