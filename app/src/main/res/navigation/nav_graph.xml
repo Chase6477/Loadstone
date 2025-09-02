@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/selectionView"
-        android:name="de.jr.loadstone.SelectionView"
+        android:name="de.jr.loadstone.Fragments.SelectionView"
         android:label="selection"
         tools:layout="@layout/selection">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/permissionView"
-        android:name="de.jr.loadstone.PermissionView"
+        android:name="de.jr.loadstone.Fragments.PermissionView"
         android:label="PermissionView"
         tools:layout="@layout/permission">
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/compassView"
-        android:name="de.jr.loadstone.CompassView"
+        android:name="de.jr.loadstone.Fragments.CompassView"
         android:label="CompassView"
         tools:layout="@layout/compass">
         <action
@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/settingsView"
-        android:name="de.jr.loadstone.SettingsView"
+        android:name="de.jr.loadstone.Fragments.SettingsView"
         android:label="SettingsView"
         tools:layout="@layout/settings" />
 
@@ -67,7 +67,7 @@
         app:popExitAnim="@anim/settings_slide_out" />
     <fragment
         android:id="@+id/mapView"
-        android:name="de.jr.loadstone.MapView"
+        android:name="de.jr.loadstone.Fragments.MapView"
         android:label="MapView"
         tools:layout="@layout/map">
         <action

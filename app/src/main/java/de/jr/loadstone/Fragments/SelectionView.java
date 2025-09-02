@@ -1,4 +1,4 @@
-package de.jr.loadstone;
+package de.jr.loadstone.Fragments;
 
 import android.Manifest;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -23,23 +24,19 @@ import com.google.android.gms.location.Priority;
 
 import org.osmdroid.config.Configuration;
 
-import de.jr.loadstone.databinding.MapBinding;
+import de.jr.loadstone.ActivityViewModel;
+import de.jr.loadstone.Coordinate;
+import de.jr.loadstone.OSMMap;
+import de.jr.loadstone.R;
+import de.jr.loadstone.databinding.SelectionBinding;
 
-public class MapView extends Fragment {
+public class SelectionView extends Fragment {
 
-    private MapBinding binding;
-
+    private SelectionBinding binding;
     private OSMMap mapView;
-
     private FusedLocationProviderClient fusedClient;
-
     private LocationListener locationListener;
-
     private Coordinate destination;
-
-    private Coordinate lastMapPosition;
-
-    private float lastMapZoom;
 
     @Override
     public View onCreateView(
@@ -47,7 +44,7 @@ public class MapView extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = MapBinding.inflate(inflater, container, false);
+        binding = SelectionBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -56,12 +53,8 @@ public class MapView extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null) {
-            destination = new Coordinate(
-                    getArguments().getDouble("lat", -1),
-                    getArguments().getDouble("lon", -1)
-            );
-        }
+        ActivityViewModel viewModel = new ViewModelProvider(requireActivity()).get(ActivityViewModel.class);
+        destination = viewModel.getDestination();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
@@ -81,12 +74,10 @@ public class MapView extends Fragment {
                         mapView.setGPSMarker(new Coordinate(lat, lon));
                         mapView.moveToGpsMarker();
                         mapView.enableGPSMarker(true);
-                        mapView.enableDestinationMarker(true);
-                        mapView.setDestinationMarker(destination);
 
-                        if (lastMapPosition != null) {
-                            mapView.moveCenterTo(lastMapPosition);
-                            mapView.setZoom(lastMapZoom);
+                        if (destination != null) {
+                            mapView.enableDestinationMarker(true);
+                            mapView.setDestinationMarker(destination);
                         }
                     }
                 });
@@ -97,24 +88,11 @@ public class MapView extends Fragment {
 
         startLocationRequests(fusedClient);
 
-        binding.mapBackCompass.setOnClickListener(v ->
-                    NavHostFragment.findNavController(MapView.this)
-                            .navigate(R.id.action_mapView_to_compassView, destinationArgs())
-        );
-
-        binding.mapBackSelection.setOnClickListener(v ->
-                    NavHostFragment.findNavController(MapView.this)
-                            .navigate(R.id.action_mapView_to_selectionView, destinationArgs())
-        );
-    }
-
-    private Bundle destinationArgs() {
-        Bundle args = new Bundle();
-
-        args.putDouble("lat", destination.latitude);
-        args.putDouble("lon", destination.longitude);
-
-        return args;
+        binding.buttonStart.setOnClickListener(v -> {
+            viewModel.setDestination(mapView.getCenterPosition());
+            NavHostFragment.findNavController(SelectionView.this)
+                    .navigate(R.id.action_selectionView_to_compassView);
+        });
     }
 
     @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -147,8 +125,6 @@ public class MapView extends Fragment {
     public void onPause() {
         super.onPause();
         fusedClient.removeLocationUpdates(locationListener);
-        lastMapPosition = mapView.getCenterPosition();
-        lastMapZoom = mapView.getZoom();
     }
 
     @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})

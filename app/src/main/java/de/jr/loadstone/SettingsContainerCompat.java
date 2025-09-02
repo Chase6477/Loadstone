@@ -8,7 +8,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
-public class SettingsContainerFragment extends PreferenceFragmentCompat {
+public class SettingsContainerCompat extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

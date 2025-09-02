@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Loadstone</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="destination_coordinate">Destination coordinate</string>
     <string name="switch_show_distance">Show distance</string>
     <string name="text_permissions">Permissions</string>

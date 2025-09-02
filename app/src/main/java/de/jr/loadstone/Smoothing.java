@@ -4,7 +4,6 @@ public class Smoothing {
 
     private final float timeInMs;
     private final float angle;
-
     private final boolean calmSmoothing;
     private final boolean medianSmoothing;
 
@@ -35,7 +34,6 @@ public class Smoothing {
         timeSinceLast += delta;
 
         float median = sortedFixedList.getMedian();
-
         float result = (sortedFixedList.get(sortedFixedList.size - 1) - sortedFixedList.get(0));
 
         if (result > 180)
@@ -47,7 +45,6 @@ public class Smoothing {
             smoothedHoldValue = -1;
             return median;
         }
-
         if (calmSmoothing) {
             if (timeSinceLast >= timeInMs || smoothedHoldValue == -1) {
                 timeSinceLast = 0;
@@ -60,4 +57,3 @@ public class Smoothing {
 
     }
 }
-
