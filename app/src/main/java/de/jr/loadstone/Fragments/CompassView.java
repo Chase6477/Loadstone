@@ -1,4 +1,4 @@
-package de.jr.loadstone;
+package de.jr.loadstone.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -26,6 +27,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import de.jr.loadstone.ActivityViewModel;
+import de.jr.loadstone.Coordinate;
+import de.jr.loadstone.DeviceRotation;
+import de.jr.loadstone.R;
+import de.jr.loadstone.Smoothing;
 import de.jr.loadstone.databinding.CompassBinding;
 
 public class CompassView extends Fragment {
@@ -62,12 +68,8 @@ public class CompassView extends Fragment {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        if (getArguments() != null) {
-            destination = new Coordinate(
-                    getArguments().getDouble("lat", -1),
-                    getArguments().getDouble("lon", -1)
-            );
-        }
+        ActivityViewModel viewModel = new ViewModelProvider(requireActivity()).get(ActivityViewModel.class);
+        destination = viewModel.getDestination();
 
         boolean calmSmoothing = prefs.getBoolean(getString(R.string.calm_smoothing), true);
         boolean medianSmoothing = prefs.getBoolean(getString(R.string.median_smoothing), true);
@@ -104,22 +106,13 @@ public class CompassView extends Fragment {
 
         binding.buttonBackSelection.setOnClickListener(v ->
             NavHostFragment.findNavController(CompassView.this)
-                    .navigate(R.id.action_compassView_to_selectionView, destinationArgs())
+                    .navigate(R.id.action_compassView_to_selectionView)
         );
 
         binding.buttonMap.setOnClickListener(v ->
             NavHostFragment.findNavController(CompassView.this)
-                    .navigate(R.id.action_compassView_to_mapView, destinationArgs())
+                    .navigate(R.id.action_compassView_to_mapView)
         );
-    }
-
-    private Bundle destinationArgs() {
-        Bundle args = new Bundle();
-
-        args.putDouble("lat", destination.latitude);
-        args.putDouble("lon", destination.longitude);
-
-        return args;
     }
 
     // Yes, all these casts are needed

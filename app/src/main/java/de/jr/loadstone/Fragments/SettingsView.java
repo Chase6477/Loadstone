@@ -1,4 +1,4 @@
-package de.jr.loadstone;
+package de.jr.loadstone.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import de.jr.loadstone.MainActivity;
 import de.jr.loadstone.databinding.SettingsBinding;
 
 public class SettingsView extends Fragment {
 
     private SettingsBinding binding;
-
     private MainActivity mainActivity;
 
     @Override

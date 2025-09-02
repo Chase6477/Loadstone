@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context=".SelectionView">
+    tools:context=".Fragments.SelectionView">
 
     <org.osmdroid.views.MapView
         android:id="@+id/selectionMap"
