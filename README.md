@@ -13,7 +13,7 @@ This App provides a compass that only shows the direction of the destination ins
 
 ## Compass screen
 
-<img width="270" height="600" alt="compass" src="https://github.com/user-attachments/assets/517f579e-d211-4815-92e0-dddc9d399b14" />
+<img width="270" height="600" alt="compass" src="https://github.com/user-attachments/assets/d570c855-d484-493f-8cd7-c24a174edf83" />
 
 - you might have to wait for a few seconds until your current location is set
 - as soon as the "GPS location" text updates, you are ready to go
